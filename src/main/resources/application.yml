@@ -8,7 +8,7 @@ data:
     # PostgreSQL Database 1
     - name: data-base-1
       strategy: postgres
-      url: jdbc:postgresql://localhost:5432/postgres
+      url: jdbc:postgresql://postgres1:5432/postgres
       table: users_pg_1
       user: user
       password: password
@@ -21,7 +21,7 @@ data:
     # PostgreSQL Database 2
     - name: data-base-2
       strategy: postgres
-      url: jdbc:postgresql://localhost:5433/postgres
+      url: jdbc:postgresql://postgres2:5432/postgres
       table: users_pg_2
       user: user
       password: password
@@ -34,7 +34,7 @@ data:
     # Oracle Database 1
     - name: data-base-3
       strategy: oracle
-      url: jdbc:oracle:thin:@localhost:1521/FREEPDB1
+      url: jdbc:oracle:thin:@oracle1:1521/FREEPDB1
       table: users_oracle_1
       user: SYSTEM
       password: password
@@ -47,7 +47,7 @@ data:
     # Oracle Database 2
     - name: data-base-4
       strategy: oracle
-      url: jdbc:oracle:thin:@localhost:1522/FREEPDB1
+      url: jdbc:oracle:thin:@oracle2:1521/FREEPDB1
       table: users_oracle_2
       user: SYSTEM
       password: password

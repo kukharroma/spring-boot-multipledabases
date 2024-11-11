@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgres1:
     image: postgres:latest
@@ -9,6 +11,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres1:/var/lib/postgresql/data
+    networks:
+      - network
 
   postgres2:
     image: postgres:latest
@@ -20,6 +24,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres2:/var/lib/postgresql/data
+    networks:
+      - network
 
   oracle1:
     image: gvenzl/oracle-free
@@ -36,6 +42,8 @@ services:
       retries: 10
       start_period: 60s
       timeout: 10s
+    networks:
+      - network
 
   oracle2:
     image: gvenzl/oracle-free
@@ -52,6 +60,8 @@ services:
       retries: 10
       start_period: 60s
       timeout: 10s
+    networks:
+      - network
 
   liquibase-postgres:
     image: liquibase/liquibase
@@ -67,6 +77,8 @@ services:
       "
     env_file:
       - .env
+    networks:
+      - network
 
   liquibase-oracle:
     image: liquibase/liquibase
@@ -84,6 +96,22 @@ services:
       "
     env_file:
       - .env
+    networks:
+      - network
+
+  multipledb:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres1
+      - postgres2
+      - oracle1
+      - oracle2
+      - liquibase-postgres
+      - liquibase-oracle
+    networks:
+      - network
 
 volumes:
   postgres1:
@@ -91,5 +119,8 @@ volumes:
   oracle1:
   oracle2:
 
+networks:
+  network:
+    driver: bridge
 
 

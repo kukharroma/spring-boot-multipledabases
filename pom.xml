@@ -6,17 +6,24 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
+
 	<groupId>com.cook</groupId>
 	<artifactId>multipledb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>multipledb</name>
 	<description>Fetching users from multiple databases</description>
+
 	<properties>
 		<java.version>21</java.version>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
+		<jdbc.version>1.2.1.RELEASE</jdbc.version>
+		<postgresql.version>42.7.2</postgresql.version>
+		<oracle.version>23.2.0.0</oracle.version>
+		<springdoc.version>2.0.4</springdoc.version>
+		<lombok.version>1.18.30</lombok.version>
 	</properties>
 
 	<dependencies>
@@ -27,39 +34,41 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!-- Spring Data JDBC -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jdbc-core</artifactId>
-			<version>1.2.1.RELEASE</version>
+			<version>${jdbc.version}</version>
 		</dependency>
 
-		<!-- PostgreSQL Driver for connecting to PostgreSQL, Oracle, MySQl databases -->
+		<!-- PostgreSQL Driver -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.7.2</version>
+			<version>${postgresql.version}</version>
 		</dependency>
 
+		<!-- Oracle Driver -->
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc11</artifactId>
-			<version>23.2.0.0</version>
+			<version>${oracle.version}</version>
 		</dependency>
 
 		<!-- Swagger/OpenAPI for API documentation -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.0.4</version>
+			<version>${springdoc.version}</version>
 		</dependency>
 
+		<!-- Lombok  -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
 
 	</dependencies>
 

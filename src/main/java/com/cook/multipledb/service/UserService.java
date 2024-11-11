@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,7 +29,7 @@ public class UserService {
     public List<UserDto> getUsers() {
         List<User> data = dataSourcesProperties.getSources().stream()
                 .flatMap(config -> userRepository.getUsers(config).stream())
-                .collect(Collectors.toList());
+                .toList();
 
         log.info("Retrieved in total {} users", data.size());
 

@@ -19,6 +19,13 @@ public class UserRepository {
 
     private final Map<String, JdbcTemplate> jdbcTemplateMap;
 
+    private final static String USER_ID = "id";
+    private final static String USERNAME = "username";
+    private final static String NAME = "name";
+    private final static String SURNAME = "surname";
+
+    private final static String SELECT_USERS_QUERY = "SELECT %s AS id, %s AS username, %s AS name, %s AS surname FROM %s";
+
     @Autowired
     public UserRepository(Map<String, JdbcTemplate> jdbcTemplateMap) {
         this.jdbcTemplateMap = jdbcTemplateMap;
@@ -41,21 +48,21 @@ public class UserRepository {
 
     private String buildGetUsersQuery(DataSourceInfo config) {
         Map<String, String> mapping = config.mapping();
-        return String.format("SELECT %s AS id, %s AS username, %s AS name, %s AS surname FROM %s",
-                mapping.get("id"),
-                mapping.get("username"),
-                mapping.get("name"),
-                mapping.get("surname"),
+        return String.format(SELECT_USERS_QUERY,
+                mapping.get(USER_ID),
+                mapping.get(USERNAME),
+                mapping.get(NAME),
+                mapping.get(SURNAME),
                 config.table());
     }
 
     private User parseUser(ResultSet rs) {
         try {
             return new User(
-                    rs.getString("id"),
-                    rs.getString("username"),
-                    rs.getString("name"),
-                    rs.getString("surname")
+                    rs.getString(USER_ID),
+                    rs.getString(USERNAME),
+                    rs.getString(NAME),
+                    rs.getString(SURNAME)
             );
         } catch (SQLException e) {
             log.error("Error during parsing user : {}", e.getMessage());

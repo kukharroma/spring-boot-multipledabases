@@ -1,0 +1,59 @@
+data:
+  strategies:
+    postgres: org.postgresql.Driver
+    oracle: oracle.jdbc.OracleDriver
+
+  sources:
+
+    # PostgreSQL Database 1
+    - name: data-base-1
+      strategy: postgres
+      url: jdbc:postgresql://localhost:5432/postgres
+      table: users_pg_1
+      user: user
+      password: password
+      mapping:
+        id: id
+        username: username
+        name: first_name
+        surname: last_name
+
+    # PostgreSQL Database 2
+    - name: data-base-2
+      strategy: postgres
+      url: jdbc:postgresql://localhost:5433/postgres
+      table: users_pg_2
+      user: user
+      password: password
+      mapping:
+        id: ldap_user_id
+        username: ldap_username
+        name: ldap_first_name
+        surname: ldap_last_name
+
+    # Oracle Database 1
+    - name: data-base-3
+      strategy: oracle
+      url: jdbc:oracle:thin:@localhost:1521/FREEPDB1
+      table: users_oracle_1
+      user: SYSTEM
+      password: password
+      mapping:
+        id: id_x
+        username: username_x
+        name: first_name_x
+        surname: last_name_x
+
+    # Oracle Database 2
+    - name: data-base-4
+      strategy: oracle
+      url: jdbc:oracle:thin:@localhost:1522/FREEPDB1
+      table: users_oracle_2
+      user: SYSTEM
+      password: password
+      mapping:
+        id: id_y
+        username: username_y
+        name: first_name_y
+        surname: last_name_y
+

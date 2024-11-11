@@ -1,0 +1,95 @@
+services:
+  postgres1:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres1:/var/lib/postgresql/data
+
+  postgres2:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres2:/var/lib/postgresql/data
+
+  oracle1:
+    image: gvenzl/oracle-free
+    environment:
+      ORACLE_PASSWORD: password
+      ORACLE_DISABLE_ASYNCH_IO: "true"
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracle1:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM dual;' | sqlplus -s SYSTEM/password@localhost:1521/XEPDB1"]
+      interval: 10s
+      retries: 10
+      start_period: 60s
+      timeout: 10s
+
+  oracle2:
+    image: gvenzl/oracle-free
+    environment:
+      ORACLE_PASSWORD: password
+      ORACLE_DISABLE_ASYNCH_IO: "true"
+    ports:
+      - "1522:1521"
+    volumes:
+      - oracle2:/opt/oracle/oradata
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM dual;' | sqlplus -s SYSTEM/password@localhost:1522/XEPDB1"]
+      interval: 10s
+      retries: 10
+      start_period: 60s
+      timeout: 10s
+
+  liquibase-postgres:
+    image: liquibase/liquibase
+    volumes:
+      - ./changelog:/liquibase/changelog
+    depends_on:
+      - postgres1
+      - postgres2
+    command: >
+      sh -c "
+      liquibase update --url=${PG_1_URL} --username=${PG_USERNAME} --password=${PG_PASSWORD} --changelog-file=${PG_1_CHANGELOG_FILE} &&
+      liquibase update --url=${PG_2_URL} --username=${PG_USERNAME} --password=${PG_PASSWORD} --changelog-file=${PG_2_CHANGELOG_FILE}
+      "
+    env_file:
+      - .env
+
+  liquibase-oracle:
+    image: liquibase/liquibase
+    volumes:
+      - ./changelog:/liquibase/changelog
+    depends_on:
+      oracle1:
+        condition: service_healthy
+      oracle2:
+        condition: service_healthy
+    command: >
+      sh -c "
+      sleep 40 && liquibase update --url=${ORACLE_1_URL} --username=${ORACLE_USERNAME} --password=${ORACLE_PASSWORD} --changelog-file=${ORACLE_1_CHANGELOG_FILE} && 
+      liquibase update --url=${ORACLE_2_URL} --username=${ORACLE_USERNAME} --password=${ORACLE_PASSWORD} --changelog-file=${ORACLE_2_CHANGELOG_FILE}
+      "
+    env_file:
+      - .env
+
+volumes:
+  postgres1:
+  postgres2:
+  oracle1:
+  oracle2:
+
+
+
